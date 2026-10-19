@@ -62,6 +62,15 @@ export default function HomeScreen() {
         Reporte, acompanhe e confirme a correção de eventos que ocorrem na sua cidade.
       </Text>
 
+      <Link
+        href="/cadastro"
+        asChild
+      >
+        <TouchableOpacity activeOpacity={0.8}>
+          <Text style={styles.mapaSemLogin}>Não tem conta? Cadastre-se {">"}</Text>
+        </TouchableOpacity>
+      </Link>
+
       <TouchableOpacity
         activeOpacity={0.8}
         style={styles.botao}
