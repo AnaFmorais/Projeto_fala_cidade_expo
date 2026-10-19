@@ -1,49 +1,91 @@
 import { useAuth } from "@/hooks/use-auth";
-import { StyleSheet, Text } from "react-native";
+import { cores } from "@/styles/index";
+import { Image } from 'expo-image';
+import { Link } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const cores = {
-  verde: "#108245", // verde de marca — botão primário, logo
-  verdeEscuro: "#0c6b38", // verde mais escuro — usado em estado "pressed"
-  preto: "#161a20", // cor do texto principal (títulos)
-  cinzaEscuro: "#5b6472", // cor do texto secundário (subtítulo)
-  cinzaClaro: "#8a93a1", // cor do texto mais apagado (texto legal/LGPD)
-  bgBrancoGelo: "#f6f8fa", // fundo geral da tela
-  branco: "#ffffff",
-};
 
+// Por enquanto esta tela é uma cópia da tela Mapa (veja os comentários em mapa.tsx).
+// Na próxima etapa ela vai mostrar os dados e o botão de sair do usuário.
 export default function Perfil() {
-  const { isLogin: estaLogado } = useAuth();
+
+  const { user, isLogin: estaLogado } = useAuth();
+
+  const perfil = user ? user : 'sem informação disponivel';
 
   return (
-    <>
-      {/* tags Fragment para envolver o conteúdo do componente */}
-      {estaLogado ? (
-        <Text style={styles.perfilTexto}>Perfil carregado</Text>
-      ) : (
-        <Text
-          style={{
-            color: "yellow",
-            fontSize: 30,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          NAo to logado
-        </Text>
-      )}
-      <Text style={{ alignItems: "center", justifyContent: "center" }}>
-        Perfil do usuario
-      </Text>
-    </>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.status}>
+        {estaLogado ? (
+          <>
+            <Text style={[styles.statusTexto, { color: cores.verde }]}>
+              Você está logado
+            </Text>
+            <Text style={styles.titulo}>User: {perfil.displayName}</Text>
+            <Text style={styles.titulo}>Email: {perfil.email}</Text>
+            
+            <Image
+              style={styles.image}
+              source={{ uri: perfil.photoURL }}
+             // placeholder={{ blurhash }}
+              contentFit="cover"
+              transition={1000}
+            />
+
+            <Text style={styles.titulo}>Aqui vai o mapa</Text>
+            <Link href="/perfil" asChild>
+              <Pressable>
+                <Text style={styles.link}>Perfil do usuário</Text>
+              </Pressable>
+            </Link>
+          </>
+        ) : (
+          <Text style={[styles.statusTexto, { color: cores.alerta }]}>
+            Você não está logado
+          </Text>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  perfilTexto: {
-    color: cores.verde,
-    fontSize: 18,
-    marginTop: 20,
+  container: {
+    flex: 1,
+    backgroundColor: cores.bgBrancoGelo,
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  status: {
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  statusTexto: {
+    fontSize: 20,
+    fontWeight: "700",
     textAlign: "center",
-    fontWeight: 800,
+  },
+  link: {
+    color: cores.verde,
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
+    marginTop: 12,
+  },
+  titulo: {
+    color: cores.preto,
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  image: {
+   // flex: 1,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: '#0553',
   },
 });

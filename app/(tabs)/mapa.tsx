@@ -1,54 +1,49 @@
 import { useAuth } from "@/hooks/use-auth";
-import { StyleSheet, Text, View } from "react-native";
+// Paleta de cores única do projeto (arquivo styles/index.tsx).
+// Antes cada tela tinha sua própria cópia do objeto `cores`.
+import { cores } from "@/styles";
+import { Image } from 'expo-image';
+import { Link } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const cores = {
-  verde: "#108245",
-  preto: "#161a20",
-  cinzaClaro: "#8a93a1",
-  bgBrancoGelo: "#f6f8fa",
-  branco: "#ffffff",
-  alerta: "#b8860b",
-};
-
-
-interface PerfilParams {
-  uid?: string;
-  displayName?: string;
-  email?: string;
-  photoURL?: string;
-  emailVerified?: boolean;
-}
 
 export default function Mapa() {
-  // Com abas, não dá pra depender dos params da URL (cada aba é uma rota
-  // separada), então o usuário logado vem direto do AuthProvider.
+
+  // `useAuth()` lê o usuário logado do AuthContext (que conversa com o Firebase).
+  // Antes a gente passava `?logado=true` pela URL; agora qualquer tela
+  // consegue saber quem está logado sem receber parâmetros.
+  // `isLogin: estaLogado` = pega o campo `isLogin` e renomeia para `estaLogado`.
   const { user, isLogin: estaLogado } = useAuth();
-
-  const perfil: PerfilParams = {
-    uid: user?.uid,
-    displayName: user?.displayName ?? undefined,
-    email: user?.email ?? undefined,
-    photoURL: user?.photoURL ?? undefined,
-    emailVerified: user?.emailVerified,
-  };
-
-  console.log("Estou na tela de mapas")
-  console.log("Perfil do usuário:", perfil);
-
+  const perfil = user;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.status}>
-        {estaLogado ? (
+        {/* Renderização condicional: condição ? (se verdadeiro) : (se falso) */}
+        {estaLogado && perfil ?  (
           <>
             <Text style={[styles.statusTexto, { color: cores.verde }]}>
               Você está logado
             </Text>
+            <Text style={styles.titulo}>User: {perfil.displayName ?? 'Sem nome'}</Text>
+            <Text style={styles.titulo}>Email: {perfil.email ??'Sem email'}</Text>
+            
+            {/* Foto da conta Google, carregada da internet pela URL (uri) */}
+            <Image
+              style={styles.image}
+              source={{ uri: perfil.photoURL ?? undefined }}
+             // placeholder={{ blurhash }}
+              contentFit="cover"
+              transition={1000}
+            />
+
             <Text style={styles.titulo}>Aqui vai o mapa</Text>
-            <Text style={{ color: cores.preto, fontSize: 16, marginTop: 8 }}>
-              Bem-vindo, {perfil.displayName || "usuário"}!
-            </Text>
+            <Link href="/perfil" asChild>
+              <Pressable>
+                <Text style={styles.link}>Perfil do usuário</Text>
+              </Pressable>
+            </Link>
           </>
         ) : (
           <Text style={[styles.statusTexto, { color: cores.alerta }]}>
@@ -88,5 +83,14 @@ const styles = StyleSheet.create({
     color: cores.preto,
     fontSize: 18,
     fontWeight: "600",
+  },
+  image: {
+   // flex: 1,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: '#0553',
   },
 });
