@@ -43,7 +43,7 @@ export default function Cadastro() {
         await sendEmailVerification(user);
 
         // `replace` para que "voltar" não traga de novo o formulário de cadastro.
-        router.replace("/verificar-email");
+        router.replace("/");
         } catch (e) {
         setErro("erro fds");
         } finally {
