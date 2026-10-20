@@ -18,7 +18,9 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="cadastro" options={{ headerShown: false }} />
+          <Stack.Screen name="cadastro" options={{ headerShown: true, title: "Cadastre-se", headerTintColor: 'white',  headerStyle: {
+            backgroundColor: "#28a745",
+          } }} />
           <Stack.Screen name="esqueci-senha" options={{ headerShown: false }} />
           <Stack.Screen name="verificar-email" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

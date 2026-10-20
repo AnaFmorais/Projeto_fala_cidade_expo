@@ -11,6 +11,12 @@
  * Mudou uma cor aqui? Ela muda no app inteiro.
  */
 export const cores = {
+    titulo: {
+    color: 'black', //Troca a cor da fonte
+    fontSize: 40, //Troca o tamanho da fonte
+    marginVertical: 20,
+    fontWeight: 800 /*Coloca o efeito para a fonte ficar mais forte ou mais fraca*/,
+  },
   verde: "#108245", // verde de marca — botão primário, logo
   verdeEscuro: "#0c6b38", // verde mais escuro — usado em estado "pressed"
   preto: "#161a20", // cor do texto principal (títulos)
